@@ -57,3 +57,7 @@ four zero bytes.
 ## Tests
 
     python3 -m unittest discover -s tests
+
+## License
+
+MIT. See [LICENSE](LICENSE).

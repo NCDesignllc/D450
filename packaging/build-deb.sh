@@ -15,6 +15,7 @@ install -D -m 644 ppd/D450.ppd "$STAGE/usr/share/ppd/d450/D450.ppd"
 install -D -m 644 packaging/70-d450-label-printer.rules \
     "$STAGE/usr/lib/udev/rules.d/70-d450-label-printer.rules"
 install -D -m 644 README.md "$STAGE/usr/share/doc/d450-linux/README.md"
+install -D -m 644 LICENSE "$STAGE/usr/share/doc/d450-linux/copyright"
 install -D -m 755 packaging/postinst "$STAGE/DEBIAN/postinst"
 SIZE=$(du -sk "$STAGE/usr" | cut -f1)
 cat > "$STAGE/DEBIAN/control" <<CONTROL
