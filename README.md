@@ -30,8 +30,9 @@ speed, media type, tear-off and halftoning are in the printer options.
 
 Pair the printer, add a queue with the `bluetooth://` URI that
 `lpinfo -v` lists, and use the same PPD. Over Bluetooth the filter switches to
-LZO-compressed bitmaps, as the Windows driver does. This path is built from
-the driver's code but has not been tried on hardware.
+LZO-compressed bitmaps, as the Windows driver does. The compressed format is
+confirmed on the printer (sent over USB); pairing and the Bluetooth queue
+itself have not been tried.
 
 ## Protocol
 
