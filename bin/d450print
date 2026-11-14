@@ -1,0 +1,183 @@
+#!/usr/bin/python3 -I
+"""Print an image on a D450 label printer without CUPS, or inspect a job file."""
+
+import argparse
+import glob
+import os
+import sys
+
+_HERE = os.path.dirname(os.path.realpath(__file__))
+for _candidate in (os.path.join(_HERE, ".."), "/usr/lib/d450"):
+    if os.path.exists(os.path.join(_candidate, "d450tspl.py")):
+        sys.path.insert(0, _candidate)
+        break
+for _path in ("/usr/lib/python3/dist-packages",
+              os.path.expanduser("~/.local/lib/python%d.%d/site-packages" % sys.version_info[:2])):
+    if os.path.isdir(_path) and _path not in sys.path:
+        sys.path.append(_path)      # -I hides these; Pillow lives there
+
+import d450tspl as tspl  # noqa: E402
+
+
+def need_pillow():
+    try:
+        from PIL import Image
+    except ImportError:
+        sys.exit("d450print: this needs Pillow (sudo apt install python3-pil)")
+    return Image
+
+
+def parse_size(text):
+    """'4x6in', '100x150mm' or '812x1218' (dots) -> (width, height) in dots."""
+    value = text.lower().replace(" ", "")
+    unit = "dots"
+    for suffix in ("mm", "in"):
+        if value.endswith(suffix):
+            unit, value = suffix, value[:-len(suffix)]
+    try:
+        width, height = (float(part) for part in value.split("x"))
+    except ValueError:
+        raise argparse.ArgumentTypeError("size looks like 4x6in, 100x150mm or 812x1218")
+    scale = {"mm": tspl.DPI / 25.4, "in": tspl.DPI, "dots": 1}[unit]
+    dots = int(round(width * scale)), int(round(height * scale))
+    if not (0 < dots[0] <= tspl.MAX_WIDTH_DOTS and 0 < dots[1] <= tspl.MAX_HEIGHT_DOTS):
+        raise argparse.ArgumentTypeError(
+            "label must be at most %dx%d dots (%.0fx%.0f mm)"
+            % (tspl.MAX_WIDTH_DOTS, tspl.MAX_HEIGHT_DOTS,
+               tspl.MAX_WIDTH_DOTS * 25.4 / tspl.DPI, tspl.MAX_HEIGHT_DOTS * 25.4 / tspl.DPI))
+    return dots
+
+
+def image_to_gray(path, size, fit):
+    Image = need_pillow()
+    image = Image.open(path)
+    if image.mode in ("RGBA", "LA", "P"):
+        image = image.convert("RGBA")
+        background = Image.new("RGBA", image.size, "white")
+        image = Image.alpha_composite(background, image)
+    image = image.convert("L")
+    width, height = size
+    if fit == "rotate" and (image.width > image.height) != (width > height):
+        image = image.rotate(90, expand=True)
+    if fit == "none":
+        scaled = image
+    else:
+        ratio = min(width / image.width, height / image.height)
+        scaled = image.resize((max(1, int(image.width * ratio)),
+                               max(1, int(image.height * ratio))), Image.LANCZOS)
+    page = Image.new("L", (width, height), 255)
+    page.paste(scaled, ((width - scaled.width) // 2, (height - scaled.height) // 2))
+    return page.tobytes()
+
+
+def find_device():
+    nodes = sorted(glob.glob("/dev/usb/lp*"))
+    if not nodes:
+        sys.exit("d450print: no USB printer found (/dev/usb/lp*). Is it on and plugged in?")
+    for node in nodes:
+        ident = "/sys/class/usbmisc/%s/device/ieee1284_id" % os.path.basename(node)
+        try:
+            with open(ident) as handle:
+                if "D450" in handle.read():
+                    return node
+        except OSError:
+            pass
+    if len(nodes) == 1:
+        return nodes[0]
+    sys.exit("d450print: several USB printers found; pick one with --device")
+
+
+def send(data, args):
+    if args.output:
+        if args.output == "-":
+            sys.stdout.buffer.write(data)
+        else:
+            with open(args.output, "wb") as handle:
+                handle.write(data)
+        return
+    device = args.device or find_device()
+    try:
+        with open(device, "wb", buffering=0) as handle:
+            view = memoryview(data)
+            while view:
+                view = view[handle.write(view[:65536]):]
+    except PermissionError:
+        sys.exit("d450print: no permission to write %s (replug the printer after "
+                 "installing the package, or add yourself to group 'lp')" % device)
+    except OSError as exc:
+        sys.exit("d450print: cannot write to %s: %s" % (device, exc))
+
+
+def decode(path, prefix):
+    Image = need_pillow()
+    with open(path, "rb") as handle:
+        labels = tspl.parse_job(handle.read())
+    for index, label in enumerate(labels, 1):
+        print("label %d: %s" % (index, "; ".join(label.commands)))
+        print("  bitmap %d bytes wide x %d rows at (%d,%d), mode %d, copies %d"
+              % (label.width_bytes, label.height, label.x, label.y, label.mode, label.copies))
+        if prefix and label.width_bytes:
+            gray, width, height = label.full_gray()
+            name = "%s-%d.png" % (prefix, index)
+            Image.frombytes("L", (width, height), gray).save(name)
+            print("  wrote %s" % name)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Print images on a D450 label printer, bypassing CUPS.")
+    parser.add_argument("images", nargs="*", help="image files, one label each")
+    parser.add_argument("-s", "--size", type=parse_size, default="4x6in",
+                        help="label size: 4x6in, 100x150mm or dots (default 4x6in)")
+    parser.add_argument("--fit", choices=("rotate", "scale", "none"), default="rotate",
+                        help="rotate+scale to fill (default), scale only, or place 1:1")
+    parser.add_argument("-n", "--copies", type=int, default=1)
+    parser.add_argument("--density", type=int, default=8, help="0-15 (default 8)")
+    parser.add_argument("--speed", type=int, default=5, help="2-7 (default 5)")
+    parser.add_argument("--printer-defaults", action="store_true",
+                        help="do not send DENSITY/SPEED")
+    parser.add_argument("--media", choices=(tspl.MEDIA_GAP, tspl.MEDIA_CONTINUOUS,
+                                            tspl.MEDIA_MARK), default=tspl.MEDIA_GAP)
+    parser.add_argument("--gap", type=float, default=3.0, help="gap/mark height in mm")
+    parser.add_argument("--post", choices=(tspl.POST_NONE, tspl.POST_TEAR, tspl.POST_PEEL),
+                        default=tspl.POST_NONE)
+    parser.add_argument("--dither", choices=(tspl.DITHER_THRESHOLD, tspl.DITHER_ORDERED,
+                                             tspl.DITHER_DIFFUSION),
+                        default=tspl.DITHER_DIFFUSION)
+    parser.add_argument("--rotate180", action="store_true")
+    parser.add_argument("--compress", action="store_true",
+                        help="LZO-compressed bitmap (what the vendor uses over Bluetooth)")
+    parser.add_argument("-d", "--device", help="device node (default: find /dev/usb/lp*)")
+    parser.add_argument("-o", "--output", help="write the job to a file ('-' = stdout)")
+    parser.add_argument("--decode", metavar="JOB",
+                        help="describe a job file; with -o PREFIX also write PNG previews")
+    args = parser.parse_args()
+    if isinstance(args.size, str):
+        args.size = parse_size(args.size)
+
+    try:
+        if args.decode:
+            decode(args.decode, args.output)
+            return 0
+        if not args.images:
+            parser.error("give at least one image, or --decode")
+        opts = tspl.JobOptions(
+            density=None if args.printer_defaults else args.density,
+            speed=None if args.printer_defaults else args.speed,
+            media=args.media, gap_mm=args.gap, post=args.post,
+            copies=args.copies, compress=args.compress)
+        job = bytearray()
+        for path in args.images:
+            gray = image_to_gray(path, args.size, args.fit)
+            job += tspl.job_from_gray(gray, args.size[0], args.size[1], opts,
+                                      args.dither, args.rotate180)
+        send(bytes(job), args)
+    except tspl.D450Error as exc:
+        sys.exit("d450print: %s" % exc)
+    except OSError as exc:
+        sys.exit("d450print: %s" % exc)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

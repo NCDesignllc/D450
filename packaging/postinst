@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+if [ "$1" = "configure" ]; then
+    if command -v udevadm >/dev/null 2>&1; then
+        udevadm control --reload-rules || true
+        udevadm trigger --subsystem-match=usbmisc --subsystem-match=usb \
+            --attr-match=idVendor=2e3c || true
+    fi
+    cat <<'MSG'
+d450-linux installed. To add the printer (it must be on and plugged in):
+
+    sudo d450-setup
+
+MSG
+fi
+exit 0

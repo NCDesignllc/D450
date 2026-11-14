@@ -1,0 +1,146 @@
+#!/usr/bin/python3 -I
+"""CUPS filter: CUPS/PWG raster -> TSPL for the D450 label printer.
+
+Usage (as invoked by CUPS): rastertod450 job user title copies options [file]
+"""
+
+import os
+import sys
+
+_HERE = os.path.dirname(os.path.realpath(__file__))
+for _candidate in (os.path.join(_HERE, ".."), "/usr/lib/d450"):
+    if os.path.exists(os.path.join(_candidate, "d450tspl.py")):
+        sys.path.insert(0, _candidate)
+        break
+
+import d450tspl as tspl  # noqa: E402
+
+OPTION_NAMES = ("d450density", "d450speed", "d450media", "d450gap", "d450post",
+                "d450dither", "d450rotate", "d450compress", "d450offset")
+
+
+def log(level, message):
+    if level == "PAGE":               # CUPS page accounting: "PAGE: number copies"
+        sys.stderr.write("PAGE: %s\n" % message)
+    else:
+        sys.stderr.write("%s: rastertod450: %s\n" % (level, message))
+    sys.stderr.flush()
+
+
+def ppd_defaults(path):
+    values = {}
+    if not path:
+        return values
+    try:
+        with open(path, "r", encoding="latin-1") as handle:
+            for line in handle:
+                if line.startswith("*Default"):
+                    key, _, value = line[8:].partition(":")
+                    values[key.strip().lower()] = value.strip()
+    except OSError as exc:
+        log("WARNING", "cannot read PPD %s: %s" % (path, exc))
+    return values
+
+
+def job_options(text):
+    values = {}
+    for token in (text or "").split():
+        key, sep, value = token.partition("=")
+        key = key.lower()
+        if not sep:                       # boolean form: "name" / "noname"
+            if key.startswith("no"):
+                key, value = key[2:], "false"
+            else:
+                value = "true"
+        values[key] = value
+    return values
+
+
+def settings(ppd_path, option_text, device_uri):
+    """Merge PPD defaults and job options into (JobOptions, dither, rotate)."""
+    merged = {}
+    defaults = ppd_defaults(ppd_path)
+    given = job_options(option_text)
+    for name in OPTION_NAMES:
+        if name in defaults:
+            merged[name] = defaults[name]
+        if name in given:
+            merged[name] = given[name]
+
+    def pick(name, mapping, fallback):
+        value = merged.get(name, "").lower()
+        if value in mapping:
+            return mapping[value]
+        if value:
+            log("WARNING", "ignoring %s=%s" % (name, value))
+        return fallback
+
+    def number(name, fallback, low, high):
+        value = merged.get(name, "")
+        if value.lower() in ("", "default"):
+            return fallback if value == "" else None
+        try:
+            parsed = int(float(value))
+        except ValueError:
+            log("WARNING", "ignoring %s=%s" % (name, value))
+            return fallback
+        return max(low, min(high, parsed))
+
+    opts = tspl.JobOptions()
+    opts.density = number("d450density", 8, 0, 15)
+    opts.speed = number("d450speed", 5, 2, 7)
+    opts.media = pick("d450media", {"gap": tspl.MEDIA_GAP,
+                                    "continuous": tspl.MEDIA_CONTINUOUS,
+                                    "blackmark": tspl.MEDIA_MARK}, tspl.MEDIA_GAP)
+    gap = number("d450gap", 3, 0, 20)
+    opts.gap_mm = float(3 if gap is None else gap)
+    offset = number("d450offset", 0, -20, 20)
+    opts.offset_mm = float(offset or 0)
+    opts.post = pick("d450post", {"none": tspl.POST_NONE, "tearoff": tspl.POST_TEAR,
+                                  "peeloff": tspl.POST_PEEL}, tspl.POST_NONE)
+    dither = pick("d450dither", {"threshold": tspl.DITHER_THRESHOLD,
+                                 "ordered": tspl.DITHER_ORDERED,
+                                 "errordiffusion": tspl.DITHER_DIFFUSION},
+                  tspl.DITHER_THRESHOLD)
+    rotate = pick("d450rotate", {"true": True, "false": False, "on": True,
+                                 "off": False, "180": True, "0": False}, False)
+    over_bluetooth = (device_uri or "").lower().startswith(("bluetooth:", "bt:"))
+    opts.compress = pick("d450compress", {"auto": over_bluetooth, "on": True,
+                                          "off": False, "true": True,
+                                          "false": False}, over_bluetooth)
+    return opts, dither, rotate
+
+
+def main(argv):
+    if len(argv) not in (6, 7):
+        sys.stderr.write("Usage: rastertod450 job user title copies options [file]\n")
+        return 1
+    opts, dither, rotate = settings(os.environ.get("PPD"), argv[5],
+                                    os.environ.get("DEVICE_URI"))
+    source = open(argv[6], "rb") if len(argv) == 7 else sys.stdin.buffer
+    out = sys.stdout.buffer
+    pages = 0
+    try:
+        for page in tspl.read_raster(source):
+            pages += 1
+            if page.width > tspl.MAX_WIDTH_DOTS or page.height > tspl.MAX_HEIGHT_DOTS:
+                log("WARNING", "page %d is %dx%d dots; cropping to %dx%d"
+                    % (pages, page.width, page.height,
+                       min(page.width, tspl.MAX_WIDTH_DOTS),
+                       min(page.height, tspl.MAX_HEIGHT_DOTS)))
+            opts.copies = page.copies
+            out.write(tspl.job_from_gray(page.gray, page.width, page.height,
+                                         opts, dither, rotate))
+            out.flush()
+            log("PAGE", "%d %d" % (pages, page.copies))
+    except tspl.D450Error as exc:
+        log("ERROR", str(exc))
+        return 1
+    if pages == 0:
+        log("ERROR", "no pages in job")
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

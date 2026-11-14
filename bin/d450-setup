@@ -1,0 +1,16 @@
+#!/bin/sh
+# Create (or repair) the CUPS queue for a USB-connected D450.
+set -e
+QUEUE="${1:-D450}"
+PPD=/usr/share/ppd/d450/D450.ppd
+URI=$(lpinfo -v 2>/dev/null | awk '$1=="direct" && $2 ~ /^usb:\/\/.*D450/ {print $2; exit}')
+if [ -z "$URI" ]; then
+    echo "d450-setup: no D450 found on USB. Switch it on, plug it in, and run this again." >&2
+    exit 1
+fi
+lpadmin -p "$QUEUE" -E -v "$URI" -P "$PPD" -D "D450 Label Printer" \
+    -o printer-error-policy=retry-job -o printer-is-shared=false
+cupsenable "$QUEUE"
+cupsaccept "$QUEUE"
+echo "Queue '$QUEUE' is ready on $URI"
+echo "Test it with:  lp -d $QUEUE -o PageSize=w288h432 some-file.pdf"

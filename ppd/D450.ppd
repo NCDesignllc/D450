@@ -1,0 +1,261 @@
+*PPD-Adobe: "4.3"
+*FormatVersion: "4.3"
+*FileVersion: "1.0"
+*LanguageVersion: English
+*LanguageEncoding: ISOLatin1
+*PCFileName: "D450.PPD"
+*Manufacturer: "Labelife"
+*Product: "(D450)"
+*ModelName: "D450 Label Printer"
+*ShortNickName: "D450 Label Printer"
+*NickName: "D450 Label Printer (TSPL), d450-linux 1.0"
+*PSVersion: "(3010.000) 0"
+*LanguageLevel: "3"
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*FileSystem: False
+*Throughput: "8"
+*LandscapeOrientation: Plus90
+*TTRasterizer: Type42
+*1284DeviceID: "MFG:;MDL:D450;CMD:TSPL;"
+*cupsVersion: 2.4
+*cupsModelNumber: 450
+*cupsManualCopies: False
+*cupsFilter: "application/vnd.cups-raster 50 rastertod450"
+*cupsLanguages: "en"
+
+*OpenUI *PageSize/Label Size: PickOne
+*OrderDependency: 10 AnySetup *PageSize
+*DefaultPageSize: w288h432
+*PageSize w288h432/4 x 6 in: "<</PageSize[288 432]/ImagingBBox null>>setpagedevice"
+*PageSize w283h289/100 x 100 mm: "<</PageSize[283.74 289.42]/ImagingBBox null>>setpagedevice"
+*PageSize w288h576/4 x 8 in: "<</PageSize[288 576]/ImagingBBox null>>setpagedevice"
+*PageSize w288h468/4 x 6.5 in: "<</PageSize[288 467.82]/ImagingBBox null>>setpagedevice"
+*PageSize w288h288/4 x 4 in: "<</PageSize[288 288]/ImagingBBox null>>setpagedevice"
+*PageSize w288h216/4 x 3 in: "<</PageSize[288 216]/ImagingBBox null>>setpagedevice"
+*PageSize w288h180/4 x 2.5 in: "<</PageSize[288 179.82]/ImagingBBox null>>setpagedevice"
+*PageSize w288h144/4 x 2 in: "<</PageSize[288 144]/ImagingBBox null>>setpagedevice"
+*PageSize w288h72/4 x 1 in: "<</PageSize[288 72]/ImagingBBox null>>setpagedevice"
+*PageSize w252h72/3.5 x 1 in: "<</PageSize[251.82 72]/ImagingBBox null>>setpagedevice"
+*PageSize w216h360/3 x 5 in: "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+*PageSize w216h216/3 x 3 in: "<</PageSize[216 216]/ImagingBBox null>>setpagedevice"
+*PageSize w216h144/3 x 2 in: "<</PageSize[216 144]/ImagingBBox null>>setpagedevice"
+*PageSize w216h90/3 x 1.25 in: "<</PageSize[216 89.73]/ImagingBBox null>>setpagedevice"
+*PageSize w216h72/3 x 1 in: "<</PageSize[216 72]/ImagingBBox null>>setpagedevice"
+*PageSize w180h144/2.5 x 2 in: "<</PageSize[179.82 144]/ImagingBBox null>>setpagedevice"
+*PageSize w180h72/2.5 x 1 in: "<</PageSize[179.82 72]/ImagingBBox null>>setpagedevice"
+*PageSize w162h90/2.25 x 1.25 in: "<</PageSize[161.73 89.73]/ImagingBBox null>>setpagedevice"
+*PageSize w144h288/2 x 4 in: "<</PageSize[144 288]/ImagingBBox null>>setpagedevice"
+*PageSize w144h144/2 x 2 in: "<</PageSize[144 144]/ImagingBBox null>>setpagedevice"
+*PageSize w144h90/2 x 1.25 in: "<</PageSize[144 89.73]/ImagingBBox null>>setpagedevice"
+*PageSize w144h72/2 x 1 in: "<</PageSize[144 72]/ImagingBBox null>>setpagedevice"
+*PageSize w108h144/1.5 x 2 in: "<</PageSize[107.82 144]/ImagingBBox null>>setpagedevice"
+*PageSize w108h72/1.5 x 1 in: "<</PageSize[107.82 72]/ImagingBBox null>>setpagedevice"
+*PageSize w90h162/1.25 x 2.25 in: "<</PageSize[89.73 161.73]/ImagingBBox null>>setpagedevice"
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion/Label Size: PickOne
+*OrderDependency: 10 AnySetup *PageRegion
+*DefaultPageRegion: w288h432
+*PageRegion w288h432/4 x 6 in: "<</PageSize[288 432]/ImagingBBox null>>setpagedevice"
+*PageRegion w283h289/100 x 100 mm: "<</PageSize[283.74 289.42]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h576/4 x 8 in: "<</PageSize[288 576]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h468/4 x 6.5 in: "<</PageSize[288 467.82]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h288/4 x 4 in: "<</PageSize[288 288]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h216/4 x 3 in: "<</PageSize[288 216]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h180/4 x 2.5 in: "<</PageSize[288 179.82]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h144/4 x 2 in: "<</PageSize[288 144]/ImagingBBox null>>setpagedevice"
+*PageRegion w288h72/4 x 1 in: "<</PageSize[288 72]/ImagingBBox null>>setpagedevice"
+*PageRegion w252h72/3.5 x 1 in: "<</PageSize[251.82 72]/ImagingBBox null>>setpagedevice"
+*PageRegion w216h360/3 x 5 in: "<</PageSize[216 360]/ImagingBBox null>>setpagedevice"
+*PageRegion w216h216/3 x 3 in: "<</PageSize[216 216]/ImagingBBox null>>setpagedevice"
+*PageRegion w216h144/3 x 2 in: "<</PageSize[216 144]/ImagingBBox null>>setpagedevice"
+*PageRegion w216h90/3 x 1.25 in: "<</PageSize[216 89.73]/ImagingBBox null>>setpagedevice"
+*PageRegion w216h72/3 x 1 in: "<</PageSize[216 72]/ImagingBBox null>>setpagedevice"
+*PageRegion w180h144/2.5 x 2 in: "<</PageSize[179.82 144]/ImagingBBox null>>setpagedevice"
+*PageRegion w180h72/2.5 x 1 in: "<</PageSize[179.82 72]/ImagingBBox null>>setpagedevice"
+*PageRegion w162h90/2.25 x 1.25 in: "<</PageSize[161.73 89.73]/ImagingBBox null>>setpagedevice"
+*PageRegion w144h288/2 x 4 in: "<</PageSize[144 288]/ImagingBBox null>>setpagedevice"
+*PageRegion w144h144/2 x 2 in: "<</PageSize[144 144]/ImagingBBox null>>setpagedevice"
+*PageRegion w144h90/2 x 1.25 in: "<</PageSize[144 89.73]/ImagingBBox null>>setpagedevice"
+*PageRegion w144h72/2 x 1 in: "<</PageSize[144 72]/ImagingBBox null>>setpagedevice"
+*PageRegion w108h144/1.5 x 2 in: "<</PageSize[107.82 144]/ImagingBBox null>>setpagedevice"
+*PageRegion w108h72/1.5 x 1 in: "<</PageSize[107.82 72]/ImagingBBox null>>setpagedevice"
+*PageRegion w90h162/1.25 x 2.25 in: "<</PageSize[89.73 161.73]/ImagingBBox null>>setpagedevice"
+*CloseUI: *PageRegion
+
+*DefaultImageableArea: w288h432
+*ImageableArea w288h432/4 x 6 in: "0 0 288 432"
+*ImageableArea w283h289/100 x 100 mm: "0 0 283.74 289.42"
+*ImageableArea w288h576/4 x 8 in: "0 0 288 576"
+*ImageableArea w288h468/4 x 6.5 in: "0 0 288 467.82"
+*ImageableArea w288h288/4 x 4 in: "0 0 288 288"
+*ImageableArea w288h216/4 x 3 in: "0 0 288 216"
+*ImageableArea w288h180/4 x 2.5 in: "0 0 288 179.82"
+*ImageableArea w288h144/4 x 2 in: "0 0 288 144"
+*ImageableArea w288h72/4 x 1 in: "0 0 288 72"
+*ImageableArea w252h72/3.5 x 1 in: "0 0 251.82 72"
+*ImageableArea w216h360/3 x 5 in: "0 0 216 360"
+*ImageableArea w216h216/3 x 3 in: "0 0 216 216"
+*ImageableArea w216h144/3 x 2 in: "0 0 216 144"
+*ImageableArea w216h90/3 x 1.25 in: "0 0 216 89.73"
+*ImageableArea w216h72/3 x 1 in: "0 0 216 72"
+*ImageableArea w180h144/2.5 x 2 in: "0 0 179.82 144"
+*ImageableArea w180h72/2.5 x 1 in: "0 0 179.82 72"
+*ImageableArea w162h90/2.25 x 1.25 in: "0 0 161.73 89.73"
+*ImageableArea w144h288/2 x 4 in: "0 0 144 288"
+*ImageableArea w144h144/2 x 2 in: "0 0 144 144"
+*ImageableArea w144h90/2 x 1.25 in: "0 0 144 89.73"
+*ImageableArea w144h72/2 x 1 in: "0 0 144 72"
+*ImageableArea w108h144/1.5 x 2 in: "0 0 107.82 144"
+*ImageableArea w108h72/1.5 x 1 in: "0 0 107.82 72"
+*ImageableArea w90h162/1.25 x 2.25 in: "0 0 89.73 161.73"
+
+*DefaultPaperDimension: w288h432
+*PaperDimension w288h432/4 x 6 in: "288 432"
+*PaperDimension w283h289/100 x 100 mm: "283.74 289.42"
+*PaperDimension w288h576/4 x 8 in: "288 576"
+*PaperDimension w288h468/4 x 6.5 in: "288 467.82"
+*PaperDimension w288h288/4 x 4 in: "288 288"
+*PaperDimension w288h216/4 x 3 in: "288 216"
+*PaperDimension w288h180/4 x 2.5 in: "288 179.82"
+*PaperDimension w288h144/4 x 2 in: "288 144"
+*PaperDimension w288h72/4 x 1 in: "288 72"
+*PaperDimension w252h72/3.5 x 1 in: "251.82 72"
+*PaperDimension w216h360/3 x 5 in: "216 360"
+*PaperDimension w216h216/3 x 3 in: "216 216"
+*PaperDimension w216h144/3 x 2 in: "216 144"
+*PaperDimension w216h90/3 x 1.25 in: "216 89.73"
+*PaperDimension w216h72/3 x 1 in: "216 72"
+*PaperDimension w180h144/2.5 x 2 in: "179.82 144"
+*PaperDimension w180h72/2.5 x 1 in: "179.82 72"
+*PaperDimension w162h90/2.25 x 1.25 in: "161.73 89.73"
+*PaperDimension w144h288/2 x 4 in: "144 288"
+*PaperDimension w144h144/2 x 2 in: "144 144"
+*PaperDimension w144h90/2 x 1.25 in: "144 89.73"
+*PaperDimension w144h72/2 x 1 in: "144 72"
+*PaperDimension w108h144/1.5 x 2 in: "107.82 144"
+*PaperDimension w108h72/1.5 x 1 in: "107.82 72"
+*PaperDimension w90h162/1.25 x 2.25 in: "89.73 161.73"
+
+*MaxMediaWidth: "306.44"
+*MaxMediaHeight: "1080"
+*HWMargins: 0 0 0 0
+*CustomPageSize True: "pop pop pop <</PageSize[5 -2 roll]/ImagingBBox null>>setpagedevice"
+*ParamCustomPageSize Width: 1 points 22.34 306.44
+*ParamCustomPageSize Height: 2 points 13.83 1080
+*ParamCustomPageSize WidthOffset: 3 points 0 0
+*ParamCustomPageSize HeightOffset: 4 points 0 0
+*ParamCustomPageSize Orientation: 5 int 0 0
+
+*OpenUI *Resolution/Resolution: PickOne
+*OrderDependency: 20 AnySetup *Resolution
+*DefaultResolution: 203dpi
+*Resolution 203dpi/203 DPI: "<</HWResolution[203 203]>>setpagedevice"
+*CloseUI: *Resolution
+
+*OpenUI *ColorModel/Color Mode: PickOne
+*OrderDependency: 20 AnySetup *ColorModel
+*DefaultColorModel: Gray
+*ColorModel Gray/Grayscale: "<</cupsColorSpace 0/cupsColorOrder 0/cupsBitsPerColor 8/cupsCompression 0>>setpagedevice"
+*CloseUI: *ColorModel
+
+*OpenGroup: Label/Label Printer Settings
+
+*OpenUI *d450Density/Darkness: PickOne
+*OrderDependency: 30 AnySetup *d450Density
+*Defaultd450Density: 8
+*d450Density Default/Printer default: ""
+*d450Density 0/0: ""
+*d450Density 1/1: ""
+*d450Density 2/2: ""
+*d450Density 3/3: ""
+*d450Density 4/4: ""
+*d450Density 5/5: ""
+*d450Density 6/6: ""
+*d450Density 7/7: ""
+*d450Density 8/8: ""
+*d450Density 9/9: ""
+*d450Density 10/10: ""
+*d450Density 11/11: ""
+*d450Density 12/12: ""
+*d450Density 13/13: ""
+*d450Density 14/14: ""
+*d450Density 15/15: ""
+*CloseUI: *d450Density
+
+*OpenUI *d450Speed/Print Speed: PickOne
+*OrderDependency: 31 AnySetup *d450Speed
+*Defaultd450Speed: 5
+*d450Speed Default/Printer default: ""
+*d450Speed 2/2 in/s: ""
+*d450Speed 3/3 in/s: ""
+*d450Speed 4/4 in/s: ""
+*d450Speed 5/5 in/s: ""
+*d450Speed 6/6 in/s: ""
+*d450Speed 7/7 in/s: ""
+*CloseUI: *d450Speed
+
+*OpenUI *d450Media/Media Type: PickOne
+*OrderDependency: 32 AnySetup *d450Media
+*Defaultd450Media: Gap
+*d450Media Gap/Labels with gaps: ""
+*d450Media Continuous/Continuous paper: ""
+*d450Media BlackMark/Labels with black marks: ""
+*CloseUI: *d450Media
+
+*OpenUI *d450Gap/Gap / Mark Height: PickOne
+*OrderDependency: 33 AnySetup *d450Gap
+*Defaultd450Gap: 3
+*d450Gap 0/0 mm: ""
+*d450Gap 1/1 mm: ""
+*d450Gap 2/2 mm: ""
+*d450Gap 3/3 mm: ""
+*d450Gap 4/4 mm: ""
+*d450Gap 5/5 mm: ""
+*d450Gap 6/6 mm: ""
+*d450Gap 7/7 mm: ""
+*d450Gap 8/8 mm: ""
+*d450Gap 9/9 mm: ""
+*d450Gap 10/10 mm: ""
+*CloseUI: *d450Gap
+
+*OpenUI *d450Post/After Printing: PickOne
+*OrderDependency: 34 AnySetup *d450Post
+*Defaultd450Post: None
+*d450Post None/Stay in place: ""
+*d450Post TearOff/Advance to tear bar: ""
+*d450Post PeelOff/Peel off: ""
+*CloseUI: *d450Post
+
+*OpenUI *d450Dither/Halftoning: PickOne
+*OrderDependency: 35 AnySetup *d450Dither
+*Defaultd450Dither: Threshold
+*d450Dither Threshold/None (black and white): ""
+*d450Dither Ordered/Ordered dither: ""
+*d450Dither ErrorDiffusion/Error diffusion: ""
+*CloseUI: *d450Dither
+
+*OpenUI *d450Rotate/Rotate 180 Degrees: PickOne
+*OrderDependency: 36 AnySetup *d450Rotate
+*Defaultd450Rotate: False
+*d450Rotate False/Off: ""
+*d450Rotate True/On: ""
+*CloseUI: *d450Rotate
+
+*OpenUI *d450Compress/Data Compression: PickOne
+*OrderDependency: 37 AnySetup *d450Compress
+*Defaultd450Compress: Auto
+*d450Compress Auto/Automatic (Bluetooth only): ""
+*d450Compress Off/Off: ""
+*d450Compress On/On: ""
+*CloseUI: *d450Compress
+
+*CloseGroup: Label
+
+*DefaultFont: Courier
+*Font Courier: Standard "(002.004S)" Standard ROM
+*Font Helvetica: Standard "(001.006S)" Standard ROM
+*Font Times-Roman: Standard "(001.007S)" Standard ROM
+
+*% End of D450.ppd

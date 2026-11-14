@@ -1,0 +1,8 @@
+installer/
+app/
+driver/
+analysis/
+build/
+__pycache__/
+*.pyc
+*.deb

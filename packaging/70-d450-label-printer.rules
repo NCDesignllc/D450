@@ -1,0 +1,5 @@
+# D450 label printer (QIN LabelPrinter, 2e3c:5756).
+# Let the logged-in user write to the printer directly (d450print) and keep
+# ModemManager from probing it.
+SUBSYSTEM=="usbmisc", KERNEL=="lp[0-9]*", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="5756", TAG+="uaccess", SYMLINK+="d450"
+SUBSYSTEM=="usb", ATTR{idVendor}=="2e3c", ATTR{idProduct}=="5756", ENV{ID_MM_DEVICE_IGNORE}="1"
