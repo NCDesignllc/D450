@@ -8,7 +8,7 @@ Windows driver.
 ## Install
 
     packaging/build-deb.sh
-    sudo apt install ./build/d450-linux_1.0.1_all.deb
+    sudo apt install ./build/d450-linux_1.0.2_all.deb
     sudo d450-setup            # creates the CUPS queue "D450"
 
 After that the printer shows up in every print dialog. Label size, darkness,

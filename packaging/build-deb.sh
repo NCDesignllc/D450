@@ -2,7 +2,7 @@
 # Build d450-linux_<version>_all.deb into build/.
 set -e
 cd "$(dirname "$0")/.."
-VERSION="${VERSION:-1.0.1}"
+VERSION="${VERSION:-1.0.2}"
 STAGE=build/deb
 rm -rf "$STAGE"
 python3 -I tools/make_ppd.py ppd/D450.ppd
