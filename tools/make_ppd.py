@@ -136,7 +136,7 @@ def build():
            [(str(i), '%d mm' % i) for i in range(0, 11)], '3', 33)
     choice(out, 'd450Post', 'After Printing',
            [('None', 'Stay in place'), ('TearOff', 'Advance to tear bar'),
-            ('PeelOff', 'Peel off')], 'None', 34)
+            ('PeelOff', 'Peel off')], 'TearOff', 34)
     choice(out, 'd450Dither', 'Halftoning',
            [('Threshold', 'None (black and white)'), ('Ordered', 'Ordered dither'),
             ('ErrorDiffusion', 'Error diffusion')], 'Threshold', 35)

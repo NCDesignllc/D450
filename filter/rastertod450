@@ -97,7 +97,7 @@ def settings(ppd_path, option_text, device_uri):
     offset = number("d450offset", 0, -20, 20)
     opts.offset_mm = float(offset or 0)
     opts.post = pick("d450post", {"none": tspl.POST_NONE, "tearoff": tspl.POST_TEAR,
-                                  "peeloff": tspl.POST_PEEL}, tspl.POST_NONE)
+                                  "peeloff": tspl.POST_PEEL}, tspl.POST_TEAR)
     dither = pick("d450dither", {"threshold": tspl.DITHER_THRESHOLD,
                                  "ordered": tspl.DITHER_ORDERED,
                                  "errordiffusion": tspl.DITHER_DIFFUSION},

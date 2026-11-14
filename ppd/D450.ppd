@@ -222,7 +222,7 @@
 
 *OpenUI *d450Post/After Printing: PickOne
 *OrderDependency: 34 AnySetup *d450Post
-*Defaultd450Post: None
+*Defaultd450Post: TearOff
 *d450Post None/Stay in place: ""
 *d450Post TearOff/Advance to tear bar: ""
 *d450Post PeelOff/Peel off: ""

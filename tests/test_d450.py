@@ -222,18 +222,18 @@ class FilterTest(unittest.TestCase):
         (label,) = tspl.parse_job(result.stdout)
         self.assertEqual(label.commands, [
             "SIZE 10 mm,5 mm", "REFERENCE 0,0", "GAP 3.0 mm,0.0 mm", "OFFSET 0 mm",
-            "DIRECTION 0,0", "DENSITY 8", "SPEED 5", "SET TEAR OFF", "CLS"])
+            "DIRECTION 0,0", "DENSITY 8", "SPEED 5", "SET TEAR ON", "CLS"])
         self.assertEqual((label.y, label.height, label.mode, label.copies), (10, 1, 1, 2))
         self.assertIn(b"PAGE: 1 2", result.stderr)
 
     def test_job_options_override(self):
         result = self.run_filter("d450Density=12 d450Speed=Default d450Media=Continuous "
-                                 "d450Post=TearOff d450Compress=On PageSize=w288h432")
+                                 "d450Post=None d450Compress=On PageSize=w288h432")
         self.assertEqual(result.returncode, 0, result.stderr)
         (label,) = tspl.parse_job(result.stdout)
         self.assertIn("DENSITY 12", label.commands)
         self.assertIn("GAP 0 mm,0 mm", label.commands)
-        self.assertIn("SET TEAR ON", label.commands)
+        self.assertIn("SET TEAR OFF", label.commands)
         self.assertFalse([c for c in label.commands if c.startswith("SPEED")])
         self.assertEqual(label.mode, 4)
 

@@ -140,7 +140,8 @@ def main():
                                             tspl.MEDIA_MARK), default=tspl.MEDIA_GAP)
     parser.add_argument("--gap", type=float, default=3.0, help="gap/mark height in mm")
     parser.add_argument("--post", choices=(tspl.POST_NONE, tspl.POST_TEAR, tspl.POST_PEEL),
-                        default=tspl.POST_NONE)
+                        default=tspl.POST_TEAR,
+                        help="after printing: stay, advance to tear bar (default), peel")
     parser.add_argument("--dither", choices=(tspl.DITHER_THRESHOLD, tspl.DITHER_ORDERED,
                                              tspl.DITHER_DIFFUSION),
                         default=tspl.DITHER_DIFFUSION)
